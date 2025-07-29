@@ -1,0 +1,27 @@
+name: $(Build.SourceBranchName)-$(Date:yyyyMMdd)-$(Rev:r)
+
+trigger:
+  - DEV
+  - QA
+  - STG
+  - Master
+
+pool:
+  name: Default
+  demands:
+  - java
+
+resources:
+  repositories:
+  - repository: devops
+    type: git
+    name: "DevOps CCB Sitio/SHARED-LIBRARY-CCB"
+    ref: refs/heads/Master
+
+extends:
+  template: template\template-s3-maven-jdk17.yaml@devops
+  parameters:
+    bucketName: $(env)-pipeline-ccb
+    targetfolder: traslado-masivo
+    lambdaName: $(env)-traslado-masivo-extraccion-matricula-lambda
+    fileLambda: TRASLADO_EXTRACCION_SOACHA-1.0.0.jar

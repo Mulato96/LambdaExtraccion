@@ -1,0 +1,164 @@
+2025-04-10 10:26:19 [main] INFO  PersistenceXmlParser - HHH000318: Could not find any META-INF/persistence.xml file in the classpath
+2025-04-10 10:26:19 [main] INFO  PersistenceXmlParser - HHH000318: Could not find any META-INF/persistence.xml file in the classpath
+2025-04-10 10:30:03 [main] INFO  PersistenceXmlParser - HHH000318: Could not find any META-INF/persistence.xml file in the classpath
+2025-04-10 10:30:09 [main] INFO  PersistenceXmlParser - HHH000318: Could not find any META-INF/persistence.xml file in the classpath
+2025-04-10 10:32:40 [main] INFO  PersistenceXmlParser - HHH000318: Could not find any META-INF/persistence.xml file in the classpath
+2025-04-10 10:32:41 [main] INFO  PersistenceXmlParser - HHH000318: Could not find any META-INF/persistence.xml file in the classpath
+2025-04-10 10:43:04 [main] INFO  Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-04-10 10:43:12 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 10:43:13 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 10:45:28 [main] INFO  Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-04-10 10:45:31 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 10:45:31 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 10:45:31 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: com.ibm.db2.jcc.DB2Driver
+2025-04-10 10:45:31 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:db2://10.38.4.105:50000/SIREP]
+2025-04-10 10:45:31 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=ccbdesa}
+2025-04-10 10:45:31 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 10:45:31 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 10:45:32 [main] WARN  deprecation - HHH90000025: DB2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 10:45:34 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 10:45:39 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 10:45:39 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 10:45:39 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: org.postgresql.Driver
+2025-04-10 10:45:39 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:postgresql://basedb-pub-dev:5432/ServiciosVirtualesDB?currentSchema=control]
+2025-04-10 10:45:39 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=uscontrol}
+2025-04-10 10:45:39 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 10:45:39 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 10:45:40 [main] WARN  deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 10:45:40 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 10:49:17 [main] INFO  Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-04-10 10:49:21 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 10:49:21 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 10:49:21 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: com.ibm.db2.jcc.DB2Driver
+2025-04-10 10:49:21 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:db2://10.38.4.105:50000/SIREP]
+2025-04-10 10:49:21 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=ccbdesa}
+2025-04-10 10:49:21 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 10:49:21 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 10:49:22 [main] WARN  deprecation - HHH90000025: DB2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 10:49:24 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 10:49:24 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 10:49:24 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 10:49:24 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: org.postgresql.Driver
+2025-04-10 10:49:24 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:postgresql://basedb-pub-dev:5432/ServiciosVirtualesDB?currentSchema=control]
+2025-04-10 10:49:24 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=uscontrol}
+2025-04-10 10:49:24 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 10:49:24 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 10:49:25 [main] WARN  deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 10:49:26 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 10:51:41 [main] INFO  Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-04-10 10:51:41 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 10:51:41 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 10:51:41 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: com.ibm.db2.jcc.DB2Driver
+2025-04-10 10:51:41 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:db2://10.38.4.105:50000/SIREP]
+2025-04-10 10:51:41 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=ccbdesa}
+2025-04-10 10:51:41 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 10:51:41 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 10:51:42 [main] WARN  deprecation - HHH90000025: DB2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 10:51:43 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 10:51:44 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 10:51:44 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 10:51:44 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: org.postgresql.Driver
+2025-04-10 10:51:44 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:postgresql://basedb-pub-dev:5432/ServiciosVirtualesDB?currentSchema=control]
+2025-04-10 10:51:44 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=uscontrol}
+2025-04-10 10:51:44 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 10:51:44 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 10:51:45 [main] WARN  deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 10:51:45 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:02:49 [main] INFO  Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-04-10 11:02:49 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 11:02:49 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 11:02:49 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: com.ibm.db2.jcc.DB2Driver
+2025-04-10 11:02:49 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:db2://10.38.4.105:50000/SIREP]
+2025-04-10 11:02:49 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=ccbdesa}
+2025-04-10 11:02:49 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 11:02:49 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 11:02:50 [main] WARN  deprecation - HHH90000025: DB2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 11:02:51 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:02:52 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 11:02:52 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 11:02:52 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: org.postgresql.Driver
+2025-04-10 11:02:52 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:postgresql://basedb-pub-dev:5432/ServiciosVirtualesDB?currentSchema=control]
+2025-04-10 11:02:52 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=uscontrol}
+2025-04-10 11:02:52 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 11:02:52 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 11:02:53 [main] WARN  deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 11:02:53 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:08:01 [main] INFO  Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-04-10 11:08:01 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 11:08:02 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 11:08:02 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: com.ibm.db2.jcc.DB2Driver
+2025-04-10 11:08:02 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:db2://10.38.4.105:50000/SIREP]
+2025-04-10 11:08:02 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=ccbdesa}
+2025-04-10 11:08:02 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 11:08:02 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 11:08:03 [main] WARN  deprecation - HHH90000025: DB2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 11:08:05 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:08:06 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 11:08:06 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 11:08:06 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: org.postgresql.Driver
+2025-04-10 11:08:06 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:postgresql://basedb-pub-dev:5432/ServiciosVirtualesDB?currentSchema=control]
+2025-04-10 11:08:06 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=uscontrol}
+2025-04-10 11:08:06 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 11:08:06 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 11:08:07 [main] WARN  deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 11:08:07 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:13:33 [main] INFO  Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-04-10 11:13:33 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 11:13:34 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 11:13:34 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: com.ibm.db2.jcc.DB2Driver
+2025-04-10 11:13:34 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:db2://10.38.4.105:50000/SIREP]
+2025-04-10 11:13:34 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=ccbdesa}
+2025-04-10 11:13:34 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 11:13:34 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 11:13:35 [main] WARN  deprecation - HHH90000025: DB2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 11:13:37 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:13:38 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 11:13:38 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 11:13:38 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: org.postgresql.Driver
+2025-04-10 11:13:38 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:postgresql://basedb-pub-dev:5432/ServiciosVirtualesDB?currentSchema=control]
+2025-04-10 11:13:38 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=uscontrol}
+2025-04-10 11:13:38 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 11:13:38 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 11:13:39 [main] WARN  deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 11:13:39 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:14:33 [main] INFO  LambdaHandler - Extracción con años: [2023, 2024], tipos: null y cantidad: 2
+2025-04-10 11:19:06 [main] INFO  Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-04-10 11:19:06 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 11:19:07 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 11:19:07 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: com.ibm.db2.jcc.DB2Driver
+2025-04-10 11:19:07 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:db2://10.38.4.105:50000/SIREP]
+2025-04-10 11:19:07 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=ccbdesa}
+2025-04-10 11:19:07 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 11:19:07 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 11:19:07 [main] WARN  deprecation - HHH90000025: DB2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 11:19:10 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:19:11 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 11:19:11 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 11:19:11 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: org.postgresql.Driver
+2025-04-10 11:19:11 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:postgresql://basedb-pub-dev:5432/ServiciosVirtualesDB?currentSchema=control]
+2025-04-10 11:19:11 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=uscontrol}
+2025-04-10 11:19:11 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 11:19:11 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 11:19:12 [main] WARN  deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 11:19:12 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:19:32 [main] INFO  LambdaHandler - Extracción con años: [2023, 2024], tipos: null y cantidad: 2
+2025-04-10 11:20:24 [main] INFO  Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-04-10 11:20:24 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 11:20:24 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 11:20:24 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: com.ibm.db2.jcc.DB2Driver
+2025-04-10 11:20:24 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:db2://10.38.4.105:50000/SIREP]
+2025-04-10 11:20:24 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=ccbdesa}
+2025-04-10 11:20:24 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 11:20:24 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 11:20:25 [main] WARN  deprecation - HHH90000025: DB2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 11:20:28 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:20:28 [main] INFO  RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-04-10 11:20:28 [main] WARN  pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2025-04-10 11:20:28 [main] INFO  pooling - HHH10001005: Loaded JDBC driver class: org.postgresql.Driver
+2025-04-10 11:20:28 [main] INFO  pooling - HHH10001012: Connecting with JDBC URL [jdbc:postgresql://basedb-pub-dev:5432/ServiciosVirtualesDB?currentSchema=control]
+2025-04-10 11:20:28 [main] INFO  pooling - HHH10001001: Connection properties: {password=****, user=uscontrol}
+2025-04-10 11:20:28 [main] INFO  pooling - HHH10001003: Autocommit mode: false
+2025-04-10 11:20:28 [main] INFO  pooling - HHH10001115: Connection pool size: 20 (min=1)
+2025-04-10 11:20:29 [main] WARN  deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-04-10 11:20:29 [main] INFO  JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-04-10 11:21:54 [main] INFO  LambdaHandler - Extracción con años: [2023, 2024], tipos: null y cantidad: 2
