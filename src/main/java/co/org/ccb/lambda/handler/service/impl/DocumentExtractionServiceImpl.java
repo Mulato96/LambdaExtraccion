@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -220,15 +221,32 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 				.findFirst();
 
 		Integer estadoPendienteId = idStatePendiente.orElse(0);
-		for (EnrollmentsEntity enrollment : enrollments) {
-			ProcessControlEntity processControlEntity = buildProcessControlEntity(processEntity,
-					enrollment, estadoPendienteId);
-			em.persist(processControlEntity);
-			processDocumentsForEnrollment(enrollment, processControlEntity, lstStates);
-			messagesToSend.add(processControlEntity.getId().toString());
+		List<String> enrollmentNumbers = enrollments.stream()
+				.map(EnrollmentsEntity::getNumMatricula)
+				.toList();
 
-			System.out.println("Se agrego el id de proceso control a el array para enviar a la cola.");
-		}
+		List<OnbaseControlEntity> allDocuments = onbaseControlRepository.findDocumentsByEnrollmentNumber(enrollmentNumbers);
+		Map<String, List<OnbaseControlEntity>> documentsByEnrollment = allDocuments.stream()
+				.collect(Collectors.groupingBy(OnbaseControlEntity::getNumMatricula));
+
+		List<ProcessDocumentEntity> allProcessDocuments = processDocumentRepository.findByEnrollmentNumber(enrollmentNumbers);
+		Map<String, List<ProcessDocumentEntity>> processDocumentsByEnrollment = allProcessDocuments.stream()
+				.collect(Collectors.groupingBy(ProcessDocumentEntity::getEnrollmentNumber));
+
+		List<CompletableFuture<Void>> futures = enrollments.stream()
+				.map(enrollment -> CompletableFuture.runAsync(() -> {
+					ProcessControlEntity processControlEntity = buildProcessControlEntity(processEntity,
+							enrollment, estadoPendienteId);
+					em.persist(processControlEntity);
+					processDocumentsForEnrollment(enrollment, processControlEntity, lstStates,
+							documentsByEnrollment.get(enrollment.getNumMatricula()),
+							processDocumentsByEnrollment.get(enrollment.getNumMatricula()));
+					messagesToSend.add(processControlEntity.getId().toString());
+					System.out.println("Se agrego el id de proceso control a el array para enviar a la cola.");
+				}))
+				.toList();
+
+		CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 	}
 
 	private ProcessControlEntity buildProcessControlEntity(ProcessEntity processEntity,
@@ -256,23 +274,21 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 	}
 
 	public void processDocumentsForEnrollment(EnrollmentsEntity finalEnrollment,
-			ProcessControlEntity processControlEntity, List<ParameterEntity> lstStates) {
+			ProcessControlEntity processControlEntity, List<ParameterEntity> lstStates,
+			List<OnbaseControlEntity> documents, List<ProcessDocumentEntity> processDocuments) {
 
 		System.out.println("Funcion processDocumentsForEnrollment ejecutandose correctamente");
 		try {
 			Integer estadoPendienteId = getStatusId(lstStates, valueStatePendiente).orElse(0);
-			List<OnbaseControlEntity> documentsByEnrollmentNumber = onbaseControlRepository
-					.findDocumentsByEnrollmentNumber(finalEnrollment.getNumMatricula());
-			Map<String, ProcessDocumentEntity> processDocumentMap = processDocumentRepository.findByEnrollmentNumber(
-					finalEnrollment.getNumMatricula()).stream().collect(
-							Collectors.toMap(ProcessDocumentEntity::getUniqueDocumentNumber, Function.identity()));
+			Map<String, ProcessDocumentEntity> processDocumentMap = processDocuments.stream().collect(
+					Collectors.toMap(ProcessDocumentEntity::getUniqueDocumentNumber, Function.identity(), (p1, p2) -> p1));
 
 			System.out.println("Consulta de documentos para matricula" + finalEnrollment.getNumMatricula()
-					+ " exitosa = " + documentsByEnrollmentNumber.size() + " documentos");
+					+ " exitosa = " + documents.size() + " documentos");
 
 			saveCertificateForEnrollment(processControlEntity, estadoPendienteId.toString(),
 					finalEnrollment, processDocumentMap, lstStates);
-			for (OnbaseControlEntity document : documentsByEnrollmentNumber) {
+			for (OnbaseControlEntity document : documents) {
 				buildAndCreateProcessDocumentEntity(document, estadoPendienteId.toString(),
 						processControlEntity,
 						processDocumentMap, lstStates);

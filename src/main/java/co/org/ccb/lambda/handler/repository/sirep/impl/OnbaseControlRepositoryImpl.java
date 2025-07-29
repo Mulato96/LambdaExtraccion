@@ -18,9 +18,9 @@ public class OnbaseControlRepositoryImpl implements IOnbaseControlRepository {
 	}
 
 	@Override
-	public List<OnbaseControlEntity> findDocumentsByEnrollmentNumber(String enrollmentNumber) {
+	public List<OnbaseControlEntity> findDocumentsByEnrollmentNumber(List<String> enrollmentNumber) {
 		TypedQuery<OnbaseControlEntity> query = entityManager.createQuery(
-				"SELECT o FROM OnbaseControlEntity o WHERE o.numMatricula = :enrollmentNumber",
+				"SELECT o FROM OnbaseControlEntity o WHERE o.numMatricula IN :enrollmentNumber",
 				OnbaseControlEntity.class);
 
 		log.info("Ejecutando query para la extracción de documentos: {}", query);

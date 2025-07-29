@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface IProcessDocumentRepository {
 
-  List<ProcessDocumentEntity> findByEnrollmentNumber(String enrolmentNumber);
+  List<ProcessDocumentEntity> findByEnrollmentNumber(List<String> enrolmentNumber);
 }
