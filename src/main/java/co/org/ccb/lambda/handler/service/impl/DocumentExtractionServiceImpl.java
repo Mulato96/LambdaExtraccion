@@ -7,6 +7,7 @@ import static co.org.ccb.lambda.handler.util.DocumentType.CERTIFICATE_BOOK;
 import co.org.ccb.lambda.handler.model.entity.sirep.CertificateInfoEntity;
 import co.org.ccb.lambda.handler.repository.traslado.IProcessControlRepository;
 import co.org.ccb.lambda.handler.repository.traslado.IProcessDocumentRepository;
+import co.org.ccb.lambda.handler.repository.traslado.IProcessRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -59,15 +60,18 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 	private final EntityManager trasladoEntityManager;
 	private final IProcessControlRepository processControlRepository;
 	private final IProcessDocumentRepository processDocumentRepository;
+	private final IProcessRepository processRepository;
 
 	public DocumentExtractionServiceImpl(IEnrollmentsRepository enrollmentsRepository,
 			IOnbaseControlRepository onbaseControlRepository, IParameterRepository parameterRepository,
 			ISqsService sqsService, EntityManager sirepEntityManager, EntityManager trasladoEntityManager,
 			IProcessControlRepository processControlRepository,
-			IProcessDocumentRepository processDocumentRepository) {
+			IProcessDocumentRepository processDocumentRepository,
+			IProcessRepository processRepository) {
 
 		this.processControlRepository = processControlRepository;
 		this.processDocumentRepository = processDocumentRepository;
+		this.processRepository = processRepository;
 		this.typeParameterState = get("traslado.parameter.type.state");
 		this.typeParameterLimitProcess = get("traslado.parameter.type.limitmaxprocess");
 		this.valueStatePendiente = get("traslado.parameter.value.statePendiente");
@@ -185,6 +189,7 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 		System.out.println("Funcion createProcessEntity ejecutandose correctamente");
 		LocalDateTime localDateTime = convertDateToLocalDateTime(new Date());
 		ProcessEntity processEntity = new ProcessEntity();
+		processEntity.setId(processRepository.getId());
 		processEntity.setEnrollmentCount(request.getQuantityRecords());
 		processEntity.setCreatedBy(Constantes.USER_CREATE);
 		processEntity.setCreationDate(localDateTime);
