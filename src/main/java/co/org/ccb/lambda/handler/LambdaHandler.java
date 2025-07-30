@@ -1,10 +1,8 @@
 package co.org.ccb.lambda.handler;
 
 import co.org.ccb.lambda.handler.repository.traslado.IProcessControlRepository;
-import co.org.ccb.lambda.handler.repository.traslado.IProcessRepository;
 import co.org.ccb.lambda.handler.repository.traslado.impl.IProcessDocumentRepositoryImpl;
 import co.org.ccb.lambda.handler.repository.traslado.impl.ProcessControlRepositoryImpl;
-import co.org.ccb.lambda.handler.repository.traslado.impl.ProcessRepositoryImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,13 +53,12 @@ public class LambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent
 				trasladoEntityManager);
 		IProcessDocumentRepositoryImpl processDocumentRepository = new IProcessDocumentRepositoryImpl(
 				trasladoEntityManager);
-		IProcessRepository processRepository = new ProcessRepositoryImpl(trasladoEntityManager);
 		
 		ISqsService sqsService = new SqsServiceImpl(parameterRepository);
 
 		this.documentExtractionService = new DocumentExtractionServiceImpl(enrollmentsRepository,
 				onbaseControlRepository, parameterRepository, sqsService, sirepEntityManager,
-				trasladoEntityManager, iProcessControlRepository, processDocumentRepository, processRepository);
+				trasladoEntityManager, iProcessControlRepository, processDocumentRepository);
 	}
 
 	@Override
