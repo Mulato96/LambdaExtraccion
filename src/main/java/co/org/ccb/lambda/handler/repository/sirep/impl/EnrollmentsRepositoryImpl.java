@@ -158,4 +158,17 @@ public class EnrollmentsRepositoryImpl implements IEnrollmentsRepository {
 		return query.getResultList();
 	}
 
+	@Override
+	public Optional<EnrollmentsEntity> findByEnrollmentNumber(String enrollmentNumber) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<EnrollmentsEntity> query = cb.createQuery(EnrollmentsEntity.class);
+		Root<EnrollmentsEntity> enrollmentsRoot = query.from(EnrollmentsEntity.class);
+
+		query.select(enrollmentsRoot).where(cb.equal(enrollmentsRoot.get("numMatricula"), enrollmentNumber));
+
+		TypedQuery<EnrollmentsEntity> typedQuery = entityManager.createQuery(query);
+		List<EnrollmentsEntity> results = typedQuery.getResultList();
+
+		return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+	}
 }

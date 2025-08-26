@@ -1,8 +1,13 @@
 package co.org.ccb.lambda.handler.stream.aws.producer;
 
+import java.util.List;
+
+import co.org.ccb.lambda.handler.model.dto.EnrollmentMessageDTO;
 import co.org.ccb.lambda.handler.model.dto.SqsMessageDTO;
 
 public interface ISqsService {
 
 	void sendMessage(SqsMessageDTO sqsMessageDTO);
+
+	void sendEnrollmentMessages(List<EnrollmentMessageDTO> messages);
 }

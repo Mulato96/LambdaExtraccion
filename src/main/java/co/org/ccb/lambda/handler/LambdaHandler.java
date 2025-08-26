@@ -60,8 +60,8 @@ public class LambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent
 		ISqsService sqsService = new SqsServiceImpl(parameterRepository);
 
 		this.documentExtractionService = new DocumentExtractionServiceImpl(enrollmentsRepository,
-				onbaseControlRepository, parameterRepository, sqsService, sirepEntityManager,
-				trasladoEntityManager, iProcessControlRepository, processDocumentRepository, processRepository);
+				parameterRepository, sqsService, sirepEntityManager,
+				trasladoEntityManager, iProcessControlRepository, processRepository);
 	}
 
 	@Override

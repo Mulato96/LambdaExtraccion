@@ -17,4 +17,5 @@ public interface IEnrollmentsRepository {
 
 	List<CertificateInfoEntity> findCertificateInfo(String numMatricula, Set<String> numRecibo);
 
+	Optional<EnrollmentsEntity> findByEnrollmentNumber(String enrollmentNumber);
 }

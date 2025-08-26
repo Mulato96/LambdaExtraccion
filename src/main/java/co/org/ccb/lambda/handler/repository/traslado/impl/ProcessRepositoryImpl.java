@@ -6,6 +6,9 @@ import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
+import java.util.Optional;
+import co.org.ccb.lambda.handler.model.entity.traslado.ProcessEntity;
+
 public class ProcessRepositoryImpl implements IProcessRepository {
 
     private EntityManager entityManager;
@@ -14,5 +17,8 @@ public class ProcessRepositoryImpl implements IProcessRepository {
 		this.entityManager = entityManager;
 	}
 
-
+    @Override
+    public Optional<ProcessEntity> findById(Integer id) {
+        return Optional.ofNullable(entityManager.find(ProcessEntity.class, id));
+    }
 }
