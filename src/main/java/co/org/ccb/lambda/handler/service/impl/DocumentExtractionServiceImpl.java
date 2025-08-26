@@ -11,15 +11,7 @@ import co.org.ccb.lambda.handler.repository.traslado.IProcessRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -118,7 +110,7 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 					this.valueStateError,
 					this.valueStateIncompleto).contains(param.getValue()))
 					.toList();
-			
+
 			List<EnrollmentsEntity> enrollments = getEnrollmentsFromSIREP(request);
 			System.out.println("Consulta de matriculas exitosa = " + enrollments.size() + " matriculas");
 
@@ -189,7 +181,6 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 		System.out.println("Funcion createProcessEntity ejecutandose correctamente");
 		LocalDateTime localDateTime = convertDateToLocalDateTime(new Date());
 		ProcessEntity processEntity = new ProcessEntity();
-		processEntity.setId(processRepository.getId());
 		processEntity.setEnrollmentCount(request.getQuantityRecords());
 		processEntity.setCreatedBy(Constantes.USER_CREATE);
 		processEntity.setCreationDate(localDateTime);
@@ -240,7 +231,7 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 					em.persist(processControlEntity);
 					processDocumentsForEnrollment(enrollment, processControlEntity, lstStates,
 							documentsByEnrollment.get(enrollment.getNumMatricula()),
-							processDocumentsByEnrollment.get(enrollment.getNumMatricula()));
+							processDocumentsByEnrollment.getOrDefault(enrollment.getNumMatricula(), Collections.emptyList()));
 					messagesToSend.add(processControlEntity.getId().toString());
 					System.out.println("Se agrego el id de proceso control a el array para enviar a la cola.");
 				}))

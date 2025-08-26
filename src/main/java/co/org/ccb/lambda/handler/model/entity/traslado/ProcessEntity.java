@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class ProcessEntity {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_proceso", nullable = false)
 	private Integer id;
 
