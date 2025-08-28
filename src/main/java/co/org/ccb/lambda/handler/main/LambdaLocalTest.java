@@ -10,7 +10,7 @@ public class LambdaLocalTest {
 
 	public static void main(String[] args) {
 
-		String jsonBody = "{" + "\"quantityRecords\": 1," + "\"years\": [2023, 2024]" + "}";
+		String jsonBody = "{" + "\"quantityRecords\": 2," + "\"years\": [2023, 2024]" + "}";
 
 		APIGatewayProxyRequestEvent requestEvent = new APIGatewayProxyRequestEvent();
 		requestEvent.setBody(jsonBody);

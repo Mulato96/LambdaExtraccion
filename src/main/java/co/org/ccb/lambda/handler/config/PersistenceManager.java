@@ -27,13 +27,13 @@ public class PersistenceManager {
 		String passwordDbTraslado = get("aws.ssm.db.traslado.password");
 
 		sirepEntityManagerFactory = buildEntityManagerFactory("co.org.ccb.lambda.handler.model.entity.sirep",
-				urlDbSirep,usernameDbSirep, passwordDbSirep,
+				aws.getParameter(urlDbSirep), aws.getParameter(usernameDbSirep), aws.getParameter(passwordDbSirep),
 				DB2_DRIVER, "org.hibernate.dialect.DB2Dialect");
 
 		trasladoEntityManagerFactory = buildEntityManagerFactory("co.org.ccb.lambda.handler.model.entity.traslado",
-				urlDbTraslado,
-				usernameDbTraslado,
-				passwordDbTraslado, POSTGRES_DRIVER,
+				aws.getParameter(urlDbTraslado),
+				aws.getParameter(usernameDbTraslado),
+				aws.getParameter(passwordDbTraslado), POSTGRES_DRIVER,
 				"org.hibernate.dialect.PostgreSQLDialect");
 	}
 

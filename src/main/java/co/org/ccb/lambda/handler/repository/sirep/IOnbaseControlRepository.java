@@ -6,5 +6,5 @@ import co.org.ccb.lambda.handler.model.entity.sirep.OnbaseControlEntity;
 
 public interface IOnbaseControlRepository {
 
-	List<OnbaseControlEntity> findDocumentsByEnrollmentNumber(List<String> enrollmentNumber);
+	List<OnbaseControlEntity> findDocumentsByEnrollmentNumber(String enrollmentNumber);
 }

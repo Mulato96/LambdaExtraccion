@@ -5,7 +5,6 @@ import static co.org.ccb.lambda.handler.util.AppPropertiesLoader.get;
 import co.org.ccb.lambda.handler.model.entity.sirep.CertificateInfoEntity;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -155,27 +154,6 @@ public class EnrollmentsRepositoryImpl implements IEnrollmentsRepository {
 		Query query = entityManager.createNativeQuery(sql, CertificateInfoEntity.class);
 		query.setParameter("numMatricula", numMatricula);
 		query.setParameter("numRecibo", numRecibo.stream().toList());
-
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<CertificateInfoEntity> findAllCertificateInfoByEnrollmentNumbers(List<String> enrollmentNumbers) {
-		if (enrollmentNumbers == null || enrollmentNumbers.isEmpty()) {
-			return Collections.emptyList();
-		}
-		String sql = """
-        SELECT CCC.COD_VERIFICACION, CCC.NUM_RECIBO, CCS.NUM_MATRICULA
-        FROM SIREP.CC_CERTIFICADOS_CONTROL CCC
-        INNER JOIN SIREP.CC_CERTIFICADOS_SOLICITADOS CCS
-        ON CCS.NUM_RECIBO = CCC.NUM_RECIBO
-        AND CCS.ID_CERTIFICADO = CCC.ID_CERTIFICADO
-        AND CCS.NUM_CLIENTE = CCC.NUM_CLIENTE
-        WHERE CCS.NUM_MATRICULA IN (:enrollmentNumbers)
-    """;
-		Query query = entityManager.createNativeQuery(sql, CertificateInfoEntity.class);
-		query.setParameter("enrollmentNumbers", enrollmentNumbers);
 
 		return query.getResultList();
 	}

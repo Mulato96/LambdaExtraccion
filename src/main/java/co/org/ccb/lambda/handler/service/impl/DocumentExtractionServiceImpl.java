@@ -11,8 +11,15 @@ import co.org.ccb.lambda.handler.repository.traslado.IProcessRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -110,7 +117,7 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 					this.valueStateError,
 					this.valueStateIncompleto).contains(param.getValue()))
 					.toList();
-
+			
 			List<EnrollmentsEntity> enrollments = getEnrollmentsFromSIREP(request);
 			System.out.println("Consulta de matriculas exitosa = " + enrollments.size() + " matriculas");
 
@@ -126,20 +133,13 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 				return "No se encontraron matrículas para procesar";
 			}
 
-			List<String> enrollmentNumbers = enrollmentsEntities.stream()
-					.map(EnrollmentsEntity::getNumMatricula)
-					.toList();
-			List<CertificateInfoEntity> allCertificates = enrollmentsRepository.findAllCertificateInfoByEnrollmentNumbers(enrollmentNumbers);
-			Map<String, List<CertificateInfoEntity>> certificatesByEnrollment = allCertificates.stream()
-					.collect(Collectors.groupingBy(CertificateInfoEntity::getNumMatricula));
-
 			long startTime = System.currentTimeMillis();
 			System.out.println("Tiempo de inicio de procesamiento: " + startTime + " ms");
 
 			transaction.begin();
 			ProcessEntity processEntity = createProcessEntity(trasladoEntityManager, request);
-			processEnrollments(trasladoEntityManager, enrollmentsEntities, lstStates, processEntity,
-					certificatesByEnrollment, messagesToSend);
+			processEnrollments(trasladoEntityManager, enrollmentsEntities, lstStates, processEntity, request,
+					messagesToSend);
 			transaction.commit();
 
 			long endTime = System.currentTimeMillis();
@@ -149,11 +149,7 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 			System.out.println(
 					"Commit exitoso de transaccion global, numero de mensajes para la cola = " + messagesToSend.size());
 
-			if (!messagesToSend.isEmpty()) {
-				System.out.println("Enviando " + messagesToSend.size() + " mensajes a la cola SQS en lote.");
-				List<SqsMessageDTO> sqsMessages = messagesToSend.stream().map(SqsMessageDTO::new).collect(Collectors.toList());
-				sqsService.sendMessageBatch(sqsMessages);
-			}
+			messagesToSend.forEach(this::sendMessageSQS);
 			return "Proceso completado exitosamente con el ID: " + processEntity.getId();
 		} catch (Exception e) {
 			if (transaction.isActive())
@@ -192,6 +188,7 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 		System.out.println("Funcion createProcessEntity ejecutandose correctamente");
 		LocalDateTime localDateTime = convertDateToLocalDateTime(new Date());
 		ProcessEntity processEntity = new ProcessEntity();
+		processEntity.setId(processRepository.getId());
 		processEntity.setEnrollmentCount(request.getQuantityRecords());
 		processEntity.setCreatedBy(Constantes.USER_CREATE);
 		processEntity.setCreationDate(localDateTime);
@@ -214,8 +211,7 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 	}
 
 	public void processEnrollments(EntityManager em, List<EnrollmentsEntity> enrollments,
-			List<ParameterEntity> lstStates, ProcessEntity processEntity,
-			Map<String, List<CertificateInfoEntity>> certificatesByEnrollment,
+			List<ParameterEntity> lstStates, ProcessEntity processEntity, ExtractionRequestDTO request,
 			List<String> messagesToSend) {
 
 		System.out.println("Funcion processEnrollments ejecutandose correctamente");
@@ -224,34 +220,15 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 				.findFirst();
 
 		Integer estadoPendienteId = idStatePendiente.orElse(0);
-		List<String> enrollmentNumbers = enrollments.stream()
-				.map(EnrollmentsEntity::getNumMatricula)
-				.toList();
+		for (EnrollmentsEntity enrollment : enrollments) {
+			ProcessControlEntity processControlEntity = buildProcessControlEntity(processEntity,
+					enrollment, estadoPendienteId);
+			em.persist(processControlEntity);
+			processDocumentsForEnrollment(enrollment, processControlEntity, lstStates);
+			messagesToSend.add(processControlEntity.getId().toString());
 
-		List<OnbaseControlEntity> allDocuments = onbaseControlRepository.findDocumentsByEnrollmentNumber(enrollmentNumbers);
-		Map<String, List<OnbaseControlEntity>> documentsByEnrollment = allDocuments.stream()
-				.collect(Collectors.groupingBy(OnbaseControlEntity::getNumMatricula));
-
-		List<ProcessDocumentEntity> allProcessDocuments = processDocumentRepository.findByEnrollmentNumber(enrollmentNumbers);
-		Map<String, List<ProcessDocumentEntity>> processDocumentsByEnrollment = allProcessDocuments.stream()
-				.collect(Collectors.groupingBy(ProcessDocumentEntity::getEnrollmentNumber));
-
-		List<CompletableFuture<Void>> futures = enrollments.stream()
-				.map(enrollment -> CompletableFuture.runAsync(() -> {
-					ProcessControlEntity processControlEntity = buildProcessControlEntity(processEntity,
-							enrollment, estadoPendienteId);
-					em.persist(processControlEntity);
-					processDocumentsForEnrollment(enrollment, processControlEntity, lstStates,
-							documentsByEnrollment.getOrDefault(enrollment.getNumMatricula(), Collections.emptyList()),
-							processDocumentsByEnrollment.getOrDefault(enrollment.getNumMatricula(), Collections.emptyList()),
-							certificatesByEnrollment.getOrDefault(enrollment.getNumMatricula(), Collections.emptyList())
-					);
-					messagesToSend.add(processControlEntity.getId().toString());
-					System.out.println("Se agrego el id de proceso control a el array para enviar a la cola.");
-				}))
-				.toList();
-
-		CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+			System.out.println("Se agrego el id de proceso control a el array para enviar a la cola.");
+		}
 	}
 
 	private ProcessControlEntity buildProcessControlEntity(ProcessEntity processEntity,
@@ -279,22 +256,23 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 	}
 
 	public void processDocumentsForEnrollment(EnrollmentsEntity finalEnrollment,
-			ProcessControlEntity processControlEntity, List<ParameterEntity> lstStates,
-			List<OnbaseControlEntity> documents, List<ProcessDocumentEntity> processDocuments,
-			List<CertificateInfoEntity> certificateInfo) {
+			ProcessControlEntity processControlEntity, List<ParameterEntity> lstStates) {
 
 		System.out.println("Funcion processDocumentsForEnrollment ejecutandose correctamente");
 		try {
 			Integer estadoPendienteId = getStatusId(lstStates, valueStatePendiente).orElse(0);
-			Map<String, ProcessDocumentEntity> processDocumentMap = processDocuments.stream().collect(
-					Collectors.toMap(ProcessDocumentEntity::getUniqueDocumentNumber, Function.identity(), (p1, p2) -> p1));
+			List<OnbaseControlEntity> documentsByEnrollmentNumber = onbaseControlRepository
+					.findDocumentsByEnrollmentNumber(finalEnrollment.getNumMatricula());
+			Map<String, ProcessDocumentEntity> processDocumentMap = processDocumentRepository.findByEnrollmentNumber(
+					finalEnrollment.getNumMatricula()).stream().collect(
+							Collectors.toMap(ProcessDocumentEntity::getUniqueDocumentNumber, Function.identity(), (existing, replacemeng) -> existing));
 
 			System.out.println("Consulta de documentos para matricula" + finalEnrollment.getNumMatricula()
-					+ " exitosa = " + documents.size() + " documentos");
+					+ " exitosa = " + documentsByEnrollmentNumber.size() + " documentos");
 
 			saveCertificateForEnrollment(processControlEntity, estadoPendienteId.toString(),
-					finalEnrollment, processDocumentMap, lstStates, certificateInfo);
-			for (OnbaseControlEntity document : documents) {
+					finalEnrollment, processDocumentMap, lstStates);
+			for (OnbaseControlEntity document : documentsByEnrollmentNumber) {
 				buildAndCreateProcessDocumentEntity(document, estadoPendienteId.toString(),
 						processControlEntity,
 						processDocumentMap, lstStates);
@@ -340,7 +318,7 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 							: LocalDateTime.now());
 			processDocumentEntity.setFinalName(
 					document.getNombreArchivo() != null ? document.getNombreArchivo()
-							: "TEST-" + determineDocumentType(document) + document.getHandle());
+							: "VARIOS-" + determineDocumentType(document) + document.getHandle());
 			processDocumentEntity.setBookId(document.getIdLibro());
 			processDocumentEntity.setRecordNumber(document.getNumRegistro());
 			processDocumentEntity.setCreationDate(convertDateToLocalDateTime(new Date()));
@@ -351,38 +329,42 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 
 	private void saveCertificateForEnrollment(ProcessControlEntity processControlEntity,
 			String idStatePendiente, EnrollmentsEntity finalEnrollment,
-			Map<String, ProcessDocumentEntity> processDocumentMap, List<ParameterEntity> lstStates,
-			List<CertificateInfoEntity> certificateInfo) {
+			Map<String, ProcessDocumentEntity> processDocumentMap, List<ParameterEntity> lstStates) {
+		Set<String> numberCertificateSet = getCertificateNumbers(finalEnrollment);
 
 		System.out.println(
-				"Se encontraron [" + certificateInfo.size() + "] certificados pre-cargados para la matricula "
-						+ finalEnrollment.getNumMatricula());
+				"Esta matricula contiene [" + numberCertificateSet.size() + "] certificados.");
 
-		if (certificateInfo.isEmpty()) {
-			return;
-		}
+		if (!numberCertificateSet.isEmpty()) {
+			List<CertificateInfoEntity> certificateInfo = enrollmentsRepository.findCertificateInfo(
+					finalEnrollment.getNumMatricula(),
+					numberCertificateSet);
 
-		Integer idStateIncomplete = getStatusId(lstStates, valueStateIncompleto).orElse(31);
-		Integer idStateError = getStatusId(lstStates, valueStateError).orElse(5);
-
-		certificateInfo.forEach(certificateInfoEntity -> {
 			System.out.println(
-					"Procesando certificado encontrado: [" + certificateInfoEntity.getNumRecibo() + "]");
-			if (processDocumentMap.containsKey(certificateInfoEntity.getCodVerificacion())) {
-				ProcessDocumentEntity processDocument = processDocumentMap.get(
-						certificateInfoEntity.getCodVerificacion());
-				if (idStateError.toString().equals(processDocument.getStatusId()) ||
-						idStateIncomplete.toString().equals(processDocument.getStatusId())) {
-					processDocument.setStatusId(idStatePendiente);
-					processDocument.setProcessControl(processControlEntity);
-					trasladoEntityManager.merge(processDocument);
+					"Se encontro [" + certificateInfo.size() + "] certificados para la matricula "
+							+ finalEnrollment.getNumMatricula());
+
+			Integer idStateIncomplete = getStatusId(lstStates, valueStateIncompleto).orElse(31);
+			Integer idStateError = getStatusId(lstStates, valueStateError).orElse(5);
+			certificateInfo.forEach(certificateInfoEntity -> {
+				System.out.println(
+						"Certificado encontrado: [" + certificateInfoEntity.getNumRecibo() + "]");
+				if (processDocumentMap.containsKey(certificateInfoEntity.getCodVerificacion())) {
+					ProcessDocumentEntity processDocument = processDocumentMap.get(
+							certificateInfoEntity.getCodVerificacion());
+					if (idStateError.toString().equals(processDocument.getStatusId()) ||
+							idStateIncomplete.toString().equals(processDocument.getStatusId())) {
+						processDocument.setStatusId(idStatePendiente);
+						processDocument.setProcessControl(processControlEntity);
+						trasladoEntityManager.merge(processDocument);
+					}
+				} else {
+					trasladoEntityManager.persist(
+							buildProcessDocumentCertificate(processControlEntity, certificateInfoEntity,
+									idStatePendiente, finalEnrollment));
 				}
-			} else {
-				trasladoEntityManager.persist(
-						buildProcessDocumentCertificate(processControlEntity, certificateInfoEntity,
-								idStatePendiente, finalEnrollment));
-			}
-		});
+			});
+		}
 	}
 
 	private ProcessDocumentEntity buildProcessDocumentCertificate(
@@ -410,6 +392,25 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 		return certificateDocument;
 	}
 
+	private Set<String> getCertificateNumbers(EnrollmentsEntity finalEnrollment) {
+		Set<String> numberCertificateSet = new HashSet<>();
+		if (finalEnrollment.getCtrCertActiva() != null && finalEnrollment.getCtrCertActiva() == 1
+				&& finalEnrollment.getNumReciboActiva() != null) {
+			numberCertificateSet.add(finalEnrollment.getNumReciboActiva());
+		}
+		if (finalEnrollment.getCtrCertLibro() != null && finalEnrollment.getCtrCertLibro() == 1 &&
+				finalEnrollment.getCtrLibros() != null && finalEnrollment.getCtrLibros() == 1
+				&& finalEnrollment.getNumReciboLibro() != null) {
+			numberCertificateSet.add(finalEnrollment.getNumReciboLibro());
+		}
+		numberCertificateSet.forEach(
+				value -> System.out.println(
+						"Certificados de la matricula: MAT-" + finalEnrollment.getNumMatricula() + " | CERT- "
+								+ value));
+
+		return numberCertificateSet;
+	}
+
 	private static LocalDateTime convertDateToLocalDateTime(Date dateConvert) {
 		if (dateConvert instanceof java.sql.Date date) {
 			return date.toLocalDate().atStartOfDay();
@@ -418,12 +419,20 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 		}
 	}
 
+	private void sendMessageSQS(String registrationId) {
+		System.out.println("Funcion sendMessageSQS ejecutandose correctamente");
+		SqsMessageDTO message = new SqsMessageDTO(registrationId);
+
+		sqsService.sendMessage(message);
+		System.out.println("Mensaje enviado a SQS: {}" + message);
+	}
+
 	private String determineDocumentType(OnbaseControlEntity document) {
 		return switch (document.getCtrDocumento()) {
 			case 1 -> DocumentType.KARDEX.name();
 			case 2 -> DocumentType.FORM.name();
-			case 3 -> DocumentType.OTHER.name();
-			default -> DocumentType.OTHER.name();
+			case 3 -> DocumentType.OTROS.name();
+			default -> DocumentType.OTROS.name();
 		};
 	}
 

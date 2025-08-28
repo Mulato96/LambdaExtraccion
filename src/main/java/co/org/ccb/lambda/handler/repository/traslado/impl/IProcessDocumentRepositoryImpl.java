@@ -18,9 +18,9 @@ public class IProcessDocumentRepositoryImpl implements IProcessDocumentRepositor
   }
 
   @Override
-  public List<ProcessDocumentEntity> findByEnrollmentNumber(List<String> enrolmentNumber) {
+  public List<ProcessDocumentEntity> findByEnrollmentNumber(String enrolmentNumber) {
     TypedQuery<ProcessDocumentEntity> query = entityManager.createQuery(
-        "SELECT o FROM ProcessDocumentEntity o WHERE o.enrollmentNumber IN :enrollmentNumber",
+        "SELECT o FROM ProcessDocumentEntity o WHERE o.enrollmentNumber = :enrollmentNumber",
         ProcessDocumentEntity.class);
     log.info("Ejecutando query para la extracción de documentos en RDS: {}", query);
     query.setParameter("enrollmentNumber", enrolmentNumber);
