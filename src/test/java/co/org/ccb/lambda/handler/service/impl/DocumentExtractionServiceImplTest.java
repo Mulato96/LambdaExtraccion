@@ -79,11 +79,21 @@ class DocumentExtractionServiceImplTest {
         // Mock parameter repository to return some default values
         when(parameterRepository.findParameters()).thenReturn(List.of(
                 createParameter("traslado.parameter.type.limitmaxprocess", "100"),
-                createParameter("traslado.parameter.type.state", "PENDIENTE")));
+                createParameter("traslado.parameter.type.state", "PENDIENTE"),
+				createParameter("traslado.parameter.value.statePendiente", "PENDIENTE"),
+				createParameter("traslado.parameter.value.stateError", "ERROR"),
+				createParameter("traslado.parameter.value.stateIncompleto", "INCOMPLETO")
+				));
 
         service = new DocumentExtractionServiceImpl(enrollmentsRepository, onbaseControlRepository, parameterRepository,
                 sqsService, sirepEntityManager, trasladoEntityManager, processControlRepository,
                 processDocumentRepository, processRepository);
+
+		// Fix: Manually set the fields that are normally loaded from properties
+		setPrivateField(service, "typeParameterLimitProcess", "traslado.parameter.type.limitmaxprocess");
+		setPrivateField(service, "valueStatePendiente", "PENDIENTE");
+		setPrivateField(service, "valueStateError", "ERROR");
+		setPrivateField(service, "valueStateIncompleto", "INCOMPLETO");
     }
 
     private ParameterEntity createParameter(String type, String value) {
@@ -194,6 +204,8 @@ class DocumentExtractionServiceImplTest {
         enrollment.setNumMatricula("12345");
         enrollment.setCtrCertActiva(1);
         enrollment.setNumReciboActiva("9876");
+        enrollment.setCtrCertLibro(0); // Fix NPE
+        enrollment.setCtrLibros(0);   // Fix NPE
 
         ProcessControlEntity processControl = new ProcessControlEntity();
         setPrivateField(processControl, "id", 999);
