@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface IEnrollmentsRepository {
 
-	List<EnrollmentsEntity> findByFilters(List<Integer> years, List<Long> typesCodes, Integer quantityRecords);
+	List<EnrollmentsEntity> findByFilters(List<Integer> years, List<Long> typesCodes, Integer limit, int offset);
 
 	Optional<EnrollmentsEntity> findSingleByFiltersAndStateProcess(String enrollmentNumber);
 
@@ -17,4 +17,5 @@ public interface IEnrollmentsRepository {
 
 	List<CertificateInfoEntity> findCertificateInfo(String numMatricula, Set<String> numRecibo);
 
+	List<CertificateInfoEntity> findCertificateInfo(Set<String> enrollmentNumbers, Set<String> receiptNumbers);
 }

@@ -26,4 +26,16 @@ public class IProcessDocumentRepositoryImpl implements IProcessDocumentRepositor
     query.setParameter("enrollmentNumber", enrolmentNumber);
     return query.getResultList();
   }
+
+  @Override
+  public List<ProcessDocumentEntity> findByEnrollmentNumbers(java.util.Set<String> enrolmentNumbers) {
+    if (enrolmentNumbers == null || enrolmentNumbers.isEmpty()) {
+      return new java.util.ArrayList<>();
+    }
+    TypedQuery<ProcessDocumentEntity> query = entityManager.createQuery(
+        "SELECT o FROM ProcessDocumentEntity o WHERE o.enrollmentNumber IN :enrolmentNumbers",
+        ProcessDocumentEntity.class);
+    query.setParameter("enrolmentNumbers", enrolmentNumbers);
+    return query.getResultList();
+  }
 }

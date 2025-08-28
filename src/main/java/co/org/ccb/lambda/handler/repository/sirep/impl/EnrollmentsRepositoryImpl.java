@@ -34,7 +34,7 @@ public class EnrollmentsRepositoryImpl implements IEnrollmentsRepository {
 	}
 
 	@Override
-	public List<EnrollmentsEntity> findByFilters(List<Integer> years, List<Long> typesCodes, Integer quantityRecords) {
+	public List<EnrollmentsEntity> findByFilters(List<Integer> years, List<Long> typesCodes, Integer limit, int offset) {
 		System.out.println("Ejecutando consulta para la extracción de matrículas");
 
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -78,13 +78,14 @@ public class EnrollmentsRepositoryImpl implements IEnrollmentsRepository {
 					cb.asc(enrollmentsRoot.get("numMatricula")));
 		}
 
-		System.out.println("Ejecutando consulta para la extracción de matrículas");
+		System.out.println("Ejecutando consulta para la extracción de matrículas con paginación. Limite: " + limit + ", Offset: " + offset);
 
 		TypedQuery<EnrollmentsEntity> typedQuery = entityManager.createQuery(query);
 
-		if (quantityRecords != null) {
-			typedQuery.setMaxResults(quantityRecords);
+		if (limit != null) {
+			typedQuery.setMaxResults(limit);
 		}
+		typedQuery.setFirstResult(offset);
 
 		return typedQuery.getResultList();
 	}
@@ -158,4 +159,25 @@ public class EnrollmentsRepositoryImpl implements IEnrollmentsRepository {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CertificateInfoEntity> findCertificateInfo(Set<String> enrollmentNumbers, Set<String> receiptNumbers) {
+		if (enrollmentNumbers == null || enrollmentNumbers.isEmpty() || receiptNumbers == null || receiptNumbers.isEmpty()) {
+			return new ArrayList<>();
+		}
+		String sql = """
+        SELECT CCC.COD_VERIFICACION, CCC.NUM_RECIBO, CCS.NUM_MATRICULA
+        FROM SIREP.CC_CERTIFICADOS_CONTROL CCC
+        INNER JOIN SIREP.CC_CERTIFICADOS_SOLICITADOS CCS
+        ON CCS.NUM_RECIBO = CCC.NUM_RECIBO
+        AND CCS.ID_CERTIFICADO = CCC.ID_CERTIFICADO
+        AND CCS.NUM_CLIENTE = CCC.NUM_CLIENTE
+        WHERE CCS.NUM_MATRICULA IN (:enrollmentNumbers) AND CCS.NUM_RECIBO IN (:receiptNumbers)
+    """;
+		Query query = entityManager.createNativeQuery(sql, CertificateInfoEntity.class);
+		query.setParameter("enrollmentNumbers", enrollmentNumbers.stream().toList());
+		query.setParameter("receiptNumbers", receiptNumbers.stream().toList());
+
+		return query.getResultList();
+	}
 }

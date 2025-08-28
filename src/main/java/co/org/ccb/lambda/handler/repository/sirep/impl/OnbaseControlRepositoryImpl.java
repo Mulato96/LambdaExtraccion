@@ -27,4 +27,16 @@ public class OnbaseControlRepositoryImpl implements IOnbaseControlRepository {
 		query.setParameter("enrollmentNumber", enrollmentNumber);
 		return query.getResultList();
 	}
+
+	@Override
+	public List<OnbaseControlEntity> findDocumentsByEnrollmentNumbers(java.util.Set<String> enrollmentNumbers) {
+		if (enrollmentNumbers == null || enrollmentNumbers.isEmpty()) {
+			return new java.util.ArrayList<>();
+		}
+		TypedQuery<OnbaseControlEntity> query = entityManager.createQuery(
+				"SELECT o FROM OnbaseControlEntity o WHERE o.numMatricula IN :enrollmentNumbers",
+				OnbaseControlEntity.class);
+		query.setParameter("enrollmentNumbers", enrollmentNumbers);
+		return query.getResultList();
+	}
 }
