@@ -325,7 +325,7 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 							: LocalDateTime.now());
 			processDocumentEntity.setFinalName(
 					document.getNombreArchivo() != null ? document.getNombreArchivo()
-							: "TEST-" + determineDocumentType(document) + document.getHandle());
+							: "VARIOS-" + determineDocumentType(document) + document.getHandle());
 			processDocumentEntity.setBookId(document.getIdLibro());
 			processDocumentEntity.setRecordNumber(document.getNumRegistro());
 			processDocumentEntity.setCreationDate(convertDateToLocalDateTime(new Date()));
@@ -438,8 +438,8 @@ public class DocumentExtractionServiceImpl implements IDocumentExtractionService
 		return switch (document.getCtrDocumento()) {
 			case 1 -> DocumentType.KARDEX.name();
 			case 2 -> DocumentType.FORM.name();
-			case 3 -> DocumentType.OTHER.name();
-			default -> DocumentType.OTHER.name();
+			case 3 -> DocumentType.OTROS.name();
+			default -> DocumentType.OTROS.name();
 		};
 	}
 
